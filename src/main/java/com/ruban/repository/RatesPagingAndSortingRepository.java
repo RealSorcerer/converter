@@ -20,4 +20,6 @@ public interface RatesPagingAndSortingRepository extends PagingAndSortingReposit
     @Query(value = "SELECT * FROM CURRENCY_RATES r WHERE r.date = ?1 and (r.valute_id = ?2 or r.valute_id = ?3)", nativeQuery = true)
     List<CurrencyRate> findByDateAndValuteIds(Date date, String valuteId1, String valuteId2);
 
+    List<CurrencyRate> getByDateAndValuteId(Date date, String valuteId);
+
 }

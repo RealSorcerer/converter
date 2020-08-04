@@ -8,7 +8,7 @@ import java.sql.Date;
 public class CurrencyRate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
     @Column(name = "valute_id")
     private String valuteId;
     @Column(name = "num_code")
@@ -18,17 +18,17 @@ public class CurrencyRate {
     private int nominal;
     private String name;
     private double value;
-    @Column(name = "date", insertable = false)
+//    @Column(name = "date", insertable = false)
     private Date date;
 
     public CurrencyRate() {
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
