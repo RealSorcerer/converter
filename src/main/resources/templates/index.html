@@ -3,8 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <title>Hello</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js"></script>
 </head>
 <body>
-Hello!))
+<div id="history">
+    <button v-on:click="history">История</button>
+    <section v-if="errored">
+        <p>We're sorry, we're not able to retrieve this information at the moment, please try back later</p>
+    </section>
+    <section v-else>
+        <div v-if="loading">Loading...</div>
+
+        <table  v-else>
+            <thead>
+            <tr>
+                <td>Исходная валюта</td>
+                <td>Целевая валюта</td>
+                <td>Исходная сумма</td>
+                <td>Получаемая суммаs</td>
+                <td>Дата</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr
+                v-for="item in info"
+                class="item"
+            >
+                <td>{{ item.sourceСurrency }}</td>
+                <td>{{ item.targetCurrency}}</td>
+                <td>{{ item.originalAmount }}</td>
+                <td>{{ item.receivedAmount }}</td>
+                <td>{{ item.date }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</div>
+<script>
+    var history = new Vue({
+        el: '#history',
+        data: {
+            info: null,
+            loading: false,
+            errored: false
+        },
+        methods: {
+            history: function (event) {
+                axios
+                    .get('/history?date=2020-08-05')
+                    .then(response => (this.info = response.data))
+                    .catch(error => {
+                        console.log(error);
+                        this.errored = true;
+                    })
+                    .finally(() => (this.loading = false));
+            }
+        }
+    })
+</script>
 </body>
 </html>

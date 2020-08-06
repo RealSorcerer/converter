@@ -13,13 +13,8 @@ import java.util.List;
 
 @Controller
 public class MainController {
-    private final IRateService service;
-
     @Autowired
-    public MainController(IRateService service) {
-        this.service = service;
-    }
-
+    private IRateService service;
 
     @GetMapping("/")
     public String index() throws ParserConfigurationException, SAXException, IOException {
