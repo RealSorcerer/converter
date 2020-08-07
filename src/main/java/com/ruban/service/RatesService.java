@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 @Primary
@@ -57,7 +58,7 @@ public class RatesService implements IRateService {
         }
     }
 
-    private void loadRatesFromCbrf(Date dateReq) throws ParserConfigurationException, IOException, SAXException {
+    public List<CurrencyRate> loadRatesFromCbrf(Date dateReq) throws ParserConfigurationException, IOException, SAXException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -67,6 +68,7 @@ public class RatesService implements IRateService {
         String charsetName = document.getXmlEncoding();
         NodeList nodeList = document.getElementsByTagName("Valute");
 
+        List<CurrencyRate> currencies = new ArrayList<>();
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node node = nodeList.item(i);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -80,8 +82,10 @@ public class RatesService implements IRateService {
                 rate.setValue(Double.parseDouble(element.getElementsByTagName("Value").item(0).getTextContent()
                         .replace(',', '.')));
                 rate.setDate(dateReq);
+                currencies.add(rate);
                 save(rate);
             }
         }
+        return currencies;
     }
 }

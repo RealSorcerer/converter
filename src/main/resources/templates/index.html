@@ -1,12 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Hello</title>
+    <title>Конвертер</title>
+    <link th:href="@{/css.css}" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js"></script>
 </head>
 <body>
+<div>
+    <form action="#" th:action="@{/}" th:object="${conversion}" method="post">
+        <p>
+            <select th:field="*{sourceСurrency}" id="source_currency" name="source_currency">
+                <option th:each="currency : ${currencies}"th:value="${currency.valuteId}" th:text="${currency.charCode} + ' (' + ${currency.name} + ')'">
+                </option>
+            </select>
+            <select th:field="*{targetCurrency}"  id="target_currency" name="target_currency">
+                <option th:each="currency : ${currencies}"th:value="${currency.valuteId}" th:text="${currency.charCode} + ' (' + ${currency.name} + ')'">
+                </option>
+            </select>
+        </p>
+        <p>
+            <input th:field="*{originalAmount}" type="text" name="original_amount"/>
+            <input th:field="*{receivedAmount}" type="text" name="received_amount"/>
+        </p>
+        <input type="submit" value="Конвертировать">
+    </form>
+</div>
+
 <div id="history">
     <button v-on:click="history">История</button>
     <section v-if="errored">

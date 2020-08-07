@@ -25,7 +25,7 @@ public class HistoryController {
         return service.getByDate(targetDate);
     }
 
-    @PostMapping("/history")
+    @PostMapping(value = "/history", consumes = "application/json", produces = "application/json")
     void newEmployee(@RequestBody ConversionRequest request) {
         service.save(request);
     }
