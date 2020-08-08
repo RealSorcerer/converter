@@ -9,8 +9,9 @@
 <h1>Конвертер валют</h1>
 <div>
     <form action="#" th:action="@{/login}" th:object="${login}" method="post">
-        <p><input type="text" th:field="*{login}" placeholder="Логин"/></p>
-        <p><input type="text" th:field="*{password}" type="password" placeholder="Пароль" /></p>
+        <p class="error" th:utext="${message}?: ''"></p>
+        <p><input type="text" th:field="*{login}" placeholder="Логин" maxlength="20"/></p>
+        <p><input type="text" th:field="*{password}" placeholder="Пароль" maxlength="20" /></p>
         <p><input type="submit" value="Войти" /></p>
     </form>
 </div>

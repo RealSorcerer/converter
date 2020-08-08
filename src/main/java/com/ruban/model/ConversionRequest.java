@@ -1,7 +1,5 @@
 package com.ruban.model;
 
-import org.springframework.stereotype.Controller;
-
 import javax.persistence.*;
 import java.sql.Date;
 
@@ -14,12 +12,17 @@ public class ConversionRequest {
     private long id;
     @Column(name = "source_currency")
     private String sourceСurrency;
+    @Column(name = "source_currency_name")
+    private String sourceCurrencyName;
     @Column(name = "target_currency")
     private String targetCurrency;
+    @Column(name = "target_currency_name")
+    private String targetCurrencyName;
     @Column(name = "original_amount")
     private double originalAmount;
     @Column(name = "received_amount")
     private double receivedAmount;
+    @Column(name = "date", insertable = false)
     private Date date;
 
     public ConversionRequest() {
@@ -73,13 +76,51 @@ public class ConversionRequest {
         this.date = date;
     }
 
+    public String getSourceCurrencyName() {
+        return sourceCurrencyName;
+    }
+
+    public void setSourceCurrencyName(String sourceCurrencyName) {
+        this.sourceCurrencyName = sourceCurrencyName;
+    }
+
+    public String getTargetCurrencyName() {
+        return targetCurrencyName;
+    }
+
+    public void setTargetCurrencyName(String targetCurrencyName) {
+        this.targetCurrencyName = targetCurrencyName;
+    }
+
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return (int) id * sourceСurrency.hashCode() * targetCurrency.hashCode();
     }
 
     @Override
     public boolean equals(Object obj) {
-        return super.equals(obj);
+        if (obj == null) { return false; }
+        if (obj == this) { return true; }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        ConversionRequest rhs = (ConversionRequest) obj;
+        if (id != rhs.id) { return false;}
+        if (!sourceСurrency.equals(rhs.sourceСurrency)) {
+            return false;
+        }
+        if (!targetCurrency.equals(rhs.targetCurrency)) {
+            return false;
+        }
+        if (originalAmount != rhs.originalAmount) {
+            return false;
+        }
+        if (receivedAmount != rhs.receivedAmount) {
+            return false;
+        }
+        if (!date.equals(rhs.date)) {
+            return false;
+        }
+        return true;
     }
 }

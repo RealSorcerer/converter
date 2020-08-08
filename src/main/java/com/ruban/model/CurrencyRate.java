@@ -18,7 +18,6 @@ public class CurrencyRate {
     private int nominal;
     private String name;
     private double value;
-//    @Column(name = "date", insertable = false)
     private Date date;
 
     public CurrencyRate() {
@@ -90,11 +89,39 @@ public class CurrencyRate {
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return (int) id * valuteId.hashCode() * charCode.hashCode();
     }
 
     @Override
     public boolean equals(Object obj) {
-        return super.equals(obj);
+        if (obj == null) { return false; }
+        if (obj == this) { return true; }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        CurrencyRate rhs = (CurrencyRate) obj;
+        if (id != rhs.id) { return false;}
+        if (!valuteId.equals(rhs.valuteId)) {
+            return false;
+        }
+        if (!numCode.equals(rhs.numCode)) {
+            return false;
+        }
+        if (charCode != rhs.charCode) {
+            return false;
+        }
+        if (nominal != rhs.nominal) {
+            return false;
+        }
+        if (!name.equals(rhs.name)) {
+            return false;
+        }
+        if (value != rhs.value) {
+            return false;
+        }
+        if (!date.equals(rhs.date)) {
+            return false;
+        }
+        return true;
     }
 }

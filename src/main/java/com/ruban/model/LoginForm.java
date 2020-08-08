@@ -1,10 +1,8 @@
 package com.ruban.model;
 
-import org.springframework.beans.factory.annotation.Value;
-
 public class LoginForm {
-    String login;
-    String password;
+    private String login;
+    private String password;
 
     public String getLogin() {
         return login;

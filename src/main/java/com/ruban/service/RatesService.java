@@ -18,7 +18,9 @@ import java.net.URL;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Primary
 @Service
@@ -36,13 +38,14 @@ public class RatesService implements IRateService {
     }
 
 
-    public List<CurrencyRate> findByDateAndValuteIds(Date date, String valuteId1, String valuteId2) throws IOException, SAXException, ParserConfigurationException {
+    public HashMap<String, CurrencyRate> findByDateAndValuteIds(Date date, String valuteId1, String valuteId2) throws IOException, SAXException, ParserConfigurationException {
         List<CurrencyRate> list = repository.findByDateAndValuteIds(date, valuteId1, valuteId2);
         if (list.isEmpty()) {
             loadRatesFromCbrf(date);
             list = repository.findByDateAndValuteIds(date, valuteId1, valuteId2);
         }
-        return list;
+        return (HashMap<String, CurrencyRate>) list.stream()
+                .collect(Collectors.toMap(CurrencyRate::getValuteId, currencyRate -> currencyRate));
     }
 
     @Override

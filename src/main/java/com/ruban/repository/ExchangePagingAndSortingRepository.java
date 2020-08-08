@@ -13,6 +13,6 @@ import java.util.List;
 
 
 @Repository
-public interface HistoryPagingAndSortingRepository extends PagingAndSortingRepository<ConversionRequest, Long> {
+public interface ExchangePagingAndSortingRepository extends PagingAndSortingRepository<ConversionRequest, Long> {
     List<ConversionRequest> getByDate(Date date);
 }

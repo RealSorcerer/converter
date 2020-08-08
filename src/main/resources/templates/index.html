@@ -8,77 +8,97 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js"></script>
 </head>
 <body>
-<div>
+<h1>Конвертер</h1>
+<p>
     <form action="#" th:action="@{/}" th:object="${conversion}" method="post">
-        <p>
-            <select th:field="*{sourceСurrency}" id="source_currency" name="source_currency">
-                <option th:each="currency : ${currencies}"th:value="${currency.valuteId}" th:text="${currency.charCode} + ' (' + ${currency.name} + ')'">
+       <p>
+            <select style="width: 218px" th:field="*{sourceСurrency}" id="source_currency" name="source_currency">
+                <option th:each="currency : ${currencies}"th:value="${currency.valuteId}"
+                        th:text="${currency.charCode} + ' (' + ${currency.name} + ')'">
                 </option>
             </select>
-            <select th:field="*{targetCurrency}"  id="target_currency" name="target_currency">
-                <option th:each="currency : ${currencies}"th:value="${currency.valuteId}" th:text="${currency.charCode} + ' (' + ${currency.name} + ')'">
+
+            <select style="width: 218px" th:field="*{targetCurrency}"  id="target_currency" name="target_currency">
+                <option th:each="currency : ${currencies}"th:value="${currency.valuteId}"
+                        th:text="${currency.charCode} + ' (' + ${currency.name} + ')'">
                 </option>
             </select>
         </p>
         <p>
-            <input th:field="*{originalAmount}" type="text" name="original_amount"/>
-            <input th:field="*{receivedAmount}" type="text" name="received_amount"/>
+             <input style="width: 212px" th:field="*{originalAmount}" type="text" name="original_amount"/>
+
+             <input style="width: 212px" th:field="*{receivedAmount}" type="text" name="received_amount"  readonly/>
         </p>
-        <input type="submit" value="Конвертировать">
+        <p>
+            <input style="display: table-footer-group" type="submit" value="Конвертировать">
+        </p>
     </form>
-</div>
+</p>
 
-<div id="history">
-    <button v-on:click="history">История</button>
-    <section v-if="errored">
-        <p>We're sorry, we're not able to retrieve this information at the moment, please try back later</p>
-    </section>
-    <section v-else>
-        <div v-if="loading">Loading...</div>
+<p>
+    <h3>История</h3>
+    <div id="history">
+        <input type="date"
+               id="mdate"
+               v-model="mdate"
+               name="mdate">
+        <button v-on:click="history">Поиск</button>
+        <section v-if="errored">
+            <p>We're sorry, we're not able to retrieve this information at the moment, please try back later</p>
+        </section>
+        <section v-else>
+            <div v-if="loading">Loading...</div>
 
-        <table  v-else>
-            <thead>
-            <tr>
-                <td>Исходная валюта</td>
-                <td>Целевая валюта</td>
-                <td>Исходная сумма</td>
-                <td>Получаемая суммаs</td>
-                <td>Дата</td>
-            </tr>
-            </thead>
-            <tbody>
-            <tr
-                v-for="item in info"
-                class="item"
-            >
-                <td>{{ item.sourceСurrency }}</td>
-                <td>{{ item.targetCurrency}}</td>
-                <td>{{ item.originalAmount }}</td>
-                <td>{{ item.receivedAmount }}</td>
-                <td>{{ item.date }}</td>
-            </tr>
-            </tbody>
-        </table>
-    </section>
-</div>
+            <table  v-else-if="info != null">
+                <thead>
+                <tr>
+                    <td>Исходная валюта</td>
+                    <td>Целевая валюта</td>
+                    <td>Исходная сумма</td>
+                    <td>Получаемая сумма</td>
+                    <td>Дата</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr
+                    v-for="item in info"
+                    class="item"
+                >
+                    <td>{{ item.sourceCurrencyName }}</td>
+                    <td>{{ item.targetCurrencyName }}</td>
+                    <td>{{ item.originalAmount }}</td>
+                    <td>{{ item.receivedAmount }}</td>
+                    <td>{{ item.date }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+</p>
+
+
 <script>
     var history = new Vue({
         el: '#history',
         data: {
             info: null,
-            loading: false,
+            date: null,
             errored: false
         },
         methods: {
             history: function (event) {
+                if (this.mdate == null) {
+                    req_date = new Date().toISOString().slice(0,10);
+                } else {
+                    req_date = this.mdate.toString();
+                }
                 axios
-                    .get('/history?date=2020-08-05')
+                    .get('/history?date=' + req_date)
                     .then(response => (this.info = response.data))
                     .catch(error => {
                         console.log(error);
                         this.errored = true;
-                    })
-                    .finally(() => (this.loading = false));
+                    });
             }
         }
     })
