@@ -39,9 +39,9 @@
     <h3>История</h3>
     <div id="history">
         <input type="date"
-               id="mdate"
-               v-model="mdate"
-               name="mdate">
+               id="date"
+               v-model="date"
+               name="date">
         <button v-on:click="history">Поиск</button>
         <section v-if="errored">
             <p>We're sorry, we're not able to retrieve this information at the moment, please try back later</p>
@@ -82,15 +82,15 @@
         el: '#history',
         data: {
             info: null,
-            date: null,
+            date: new Date().toISOString().slice(0,10),
             errored: false
         },
         methods: {
             history: function (event) {
-                if (this.mdate == null) {
+                if (this.date == null) {
                     req_date = new Date().toISOString().slice(0,10);
                 } else {
-                    req_date = this.mdate.toString();
+                    req_date = this.date.toString();
                 }
                 axios
                     .get('/history?date=' + req_date)

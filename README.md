@@ -11,3 +11,7 @@ cd converter && mvn clean install && cd target/ && java -jar cconverter-1.0-SNAP
 
 Результат проверять по адресу http://localhost:8090/
 
+Авторизация в конвертер
+Login test
+pass  test
+
