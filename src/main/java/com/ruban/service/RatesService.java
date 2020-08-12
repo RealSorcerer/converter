@@ -3,6 +3,7 @@ package com.ruban.service;
 import com.ruban.model.CurrencyRate;
 import com.ruban.repository.RatesPagingAndSortingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
@@ -25,12 +26,11 @@ import java.util.stream.Collectors;
 @Primary
 @Service
 public class RatesService implements IRateService {
-    private final RatesPagingAndSortingRepository repository;
-
     @Autowired
-    public RatesService(RatesPagingAndSortingRepository repository) {
-        this.repository = repository;
-    }
+    private RatesPagingAndSortingRepository repository;
+
+    @Value("${rates.url}")
+    private String ratesUrl;
 
     @Override
     public List<CurrencyRate> findByValuteId(String id) {
@@ -66,7 +66,7 @@ public class RatesService implements IRateService {
         factory.setNamespaceAware(true);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Document document = factory.newDocumentBuilder().parse(
-                new URL("http://www.cbr.ru/scripts/XML_daily.asp?date_req=" + dateFormat.format(dateReq)).openStream());
+                new URL(ratesUrl + dateFormat.format(dateReq)).openStream());
 
         String charsetName = document.getXmlEncoding();
         NodeList nodeList = document.getElementsByTagName("Valute");
